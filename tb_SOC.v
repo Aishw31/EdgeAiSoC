@@ -4,14 +4,20 @@ module SOC_tb;
     // Testbench signals
     reg clk;
     reg resetn;
+    wire [3:0] led;
 
+    reg ser_rx;
+    wire ser_tx;
     // Simulation parameters
-    parameter CLK_PERIOD = 10; // 10ns = 100MHz
+    parameter CLK_PERIOD = 15; // 10ns = 100MHz
 
-    // Instantiate the SOC
+    // Instantiate the SOC with debug signals
     SOC uut (
         .clk(clk),
-        .resetn(resetn)
+        .resetn(resetn),
+        .led(led),
+        .ser_rx(ser_rx),
+        .ser_tx(ser_tx)
     );
 
     // Clock generation
@@ -22,15 +28,19 @@ module SOC_tb;
 
     // Reset stimulus
     initial begin
-        // Apply reset
+        // Initialize signals
+        #100;
+        clk = 0;
         resetn = 0;
-        repeat(5) @(posedge clk); // Hold reset for 5 clock cycles (50 ns)
+        ser_rx = 1 ;
+        // Apply Reset
+        #100;   // Wait 100ns
+        resetn = 1;  // Release reset
 
-        // Release reset and run for 500 ns
-        resetn = 1;
-        #500;
+        // Run simulation for some time
+        #1000;
 
-        // End simulation
         $finish;
     end
+
 endmodule
