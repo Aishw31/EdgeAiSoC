@@ -68,7 +68,7 @@ module SOC
 
 
     // matrix mul
-    wire mm_sel = mem_valid && (mem_addr >= 32'h 0300_0000);
+    wire mm_sel = mem_valid && (mem_addr == 32'h 0300_0000);
     wire [31:0] mm_do ;
     
  
@@ -188,16 +188,25 @@ module SOC
     
     // Matrix mul unit
     
-    MMSystolicArray #(
+//    MMSystolicArray #(
     
-        ) MatrixMul (
-        .clk(clk),
-        .wen(mm_sel ? mem_wstrb : 4'b0),
-        .addr(mem_addr[23:2]),
-        .wdata(mem_wdata),
-        .rdata(mm_do)
-        );
+//        ) MatrixMul (
+//        .clk(clk),
+//        .wen(mm_sel ? mem_wstrb : 4'b0),
+//        .addr(mem_addr[23:2]),
+//        .wdata(mem_wdata),
+//        .rdata(mm_do)
+//        );
     
+    SYSTOLIC #(
+) new_module(
+    .clk(clk),
+    .reset(resetn),
+    .wen(mm_sel ? mem_wstrb :4'b0),
+    .wdata(mem_wdata),
+    .rdata(mm_do)
+);
+
     
     assign led = led_rdata[3:0];
     assign reset_led = resetn;
@@ -216,7 +225,7 @@ module SRAM_v2 #(
     reg [31:0] mem [0:WORDS-1];
     
     initial begin
-        $readmemh("systest.mem", mem);
+        $readmemh("new_sys_one.mem", mem);
     end
     
     always @(posedge clk) begin

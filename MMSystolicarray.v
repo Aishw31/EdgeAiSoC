@@ -56,42 +56,24 @@ module MMSystolicArray #(
                     in_buffers[3] <= wdata[31:0];
                 end
             endcase
-        end else begin
-            case (addr[7:0])
-                CONTROL_REG: begin
-                    rdata <= control;
-                end
-                STATUS_REG: begin
-                    rdata <= status;
-                end
-                NORTH_0: begin
-                    rdata <= in_buffers[0];
-                end
-                NORTH_1: begin
-                    rdata <= in_buffers[1];
-                end
-                WEST_0: begin
-                    rdata <= in_buffers[2];
-                end
-                WEST_1: begin
-                    rdata <= in_buffers[3];
-                end
-                RESULT_00: begin
-                    rdata <= out_buffers[0];
-                end
-                RESULT_01: begin
-                    rdata <= out_buffers[1];
-                end
-                RESULT_10: begin
-                    rdata <= out_buffers[2];
-                end
-                RESULT_11: begin
-                    rdata <= out_buffers[3];
-                end
-            endcase
         end
+     end
+    // **Register Read Operations (Fixed)**
+    always @(posedge clk) begin
+        case (addr[7:0])
+            CONTROL_REG: rdata <= control;  // ✅ Correctly updates rdata
+            STATUS_REG:  rdata <= status;
+            NORTH_0:     rdata <= in_buffers[0];
+            NORTH_1:     rdata <= in_buffers[1];
+            WEST_0:      rdata <= in_buffers[2];
+            WEST_1:      rdata <= in_buffers[3];
+            RESULT_00:   rdata <= out_buffers[0];
+            RESULT_01:   rdata <= out_buffers[1];
+            RESULT_10:   rdata <= out_buffers[2];
+            RESULT_11:   rdata <= out_buffers[3];
+            default:     rdata <= 32'hABCD;  // ✅ Prevents stale values
+        endcase
     end
-    
       // Instantiate the Systolic Array Module
     systolic_array_2x2 #(
         .WIDTH(WIDTH)

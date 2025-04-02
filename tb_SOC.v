@@ -9,7 +9,7 @@ module SOC_tb;
     reg ser_rx;
     wire ser_tx;
     // Simulation parameters
-    parameter CLK_PERIOD = 15; // 10ns = 100MHz
+    parameter CLK_PERIOD = 10; // 10ns = 100MHz
 
     // Instantiate the SOC with debug signals
     SOC uut (
