@@ -20,16 +20,16 @@ module SOC
     parameter [ 0:0] ENABLE_REGS_16_31 = 1;
     parameter [ 0:0] ENABLE_REGS_DUALPORT = 1;
     parameter [ 0:0] LATCHED_MEM_RDATA = 0;  // Changed to 0 to match PicoSoC
-    parameter [ 0:0] TWO_STAGE_SHIFT = 1;
+    parameter [ 0:0] TWO_STAGE_SHIFT = 0;
     parameter [ 0:0] BARREL_SHIFTER = 1;
-    parameter [ 0:0] TWO_CYCLE_COMPARE = 1;
-    parameter [ 0:0] TWO_CYCLE_ALU = 1;
+    parameter [ 0:0] TWO_CYCLE_COMPARE = 0;
+    parameter [ 0:0] TWO_CYCLE_ALU = 0;
     parameter [ 0:0] COMPRESSED_ISA = 1;
     parameter [ 0:0] CATCH_MISALIGN = 1;
     parameter [ 0:0] CATCH_ILLINSN = 1;
     parameter [ 0:0] ENABLE_PCPI = 0;
     parameter [ 0:0] ENABLE_MUL = 1;
-    parameter [ 0:0] ENABLE_FAST_MUL = 1;
+    parameter [ 0:0] ENABLE_FAST_MUL = 0;
     parameter [ 0:0] ENABLE_DIV = 1;
     parameter [ 0:0] ENABLE_IRQ = 0;
     parameter [ 0:0] ENABLE_IRQ_QREGS = 0;
@@ -225,7 +225,7 @@ module SRAM_v2 #(
     reg [31:0] mem [0:WORDS-1];
     
     initial begin
-        $readmemh("new_sys_one.mem", mem);
+        $readmemh("main.mem", mem);
     end
     
     always @(posedge clk) begin
@@ -261,3 +261,5 @@ module led_module (
         rdata = device_reg;
     end
 endmodule
+
+
